@@ -19,7 +19,6 @@ USE `e_commerce`;
 
 --
 -- Table structure for table `cad_produto`
---
 
 DROP TABLE IF EXISTS `cad_produto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
