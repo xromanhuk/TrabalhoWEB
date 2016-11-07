@@ -21,7 +21,12 @@ public class LoginController {
 
     public static Boolean estaLogado(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        return cookies[1].getName().equals("usuario") && cookies[2].getName().equals("senha");
+        try {
+            return cookies[1].getName().equals("usuario") && cookies[2].getName().equals("senha");
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public static Boolean existe(String usuario, String senha) {

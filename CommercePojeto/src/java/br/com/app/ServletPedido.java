@@ -28,49 +28,65 @@ public class ServletPedido extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Cookie[] cookies = request.getCookies();
-        String nome = cookies[1].getValue();
-
-        
-        ItemPedidoDAO itemDAO = new ItemPedidoDAO();
-        PedidoDAO pedidoDAO = new PedidoDAO();
-        UsuarioDAO us = new UsuarioDAO();
-        Pedido pedido = new Pedido();
-        ItemPedido item = new ItemPedido();
-        Usuario usuario = new Usuario();
-
-        try {
-            ResultSet rst = us.consultaUsuario(nome);
-            while (rst.next()) {
-                pedido.setId_usuario(rst.getInt("id"));
+        Cookie cookie[] = request.getCookies();
+        Boolean achou = false;
+        for (int i = 0; i < cookie.length; i++) {
+            if (cookie[i].getName().equals("usuario") || cookie[i].getName().equals("senha")) {
+                achou = true;
             }
-            //Inserio o pedido e id do usuario
-            pedidoDAO.inserirPedido(pedido);
-        } catch (SQLException ex) {
-
         }
 
-        try {
-            ResultSet rst = pedidoDAO.ultimaSeq();
-            while (rst.next()) {
-                pedido.setId(rst.getInt("MAX"));
+        if (achou == false) {
+
+            response.sendRedirect("Senha.jsp?tem=nao");
+
+        } else {
+
+            Cookie[] cookies = request.getCookies();
+            String nome      = cookies[1].getValue();
+            String senha     = cookies[2].getValue();
+            
+            ItemPedidoDAO itemDAO = new ItemPedidoDAO();
+            PedidoDAO pedidoDAO   = new PedidoDAO();
+            UsuarioDAO us         = new UsuarioDAO();
+            Pedido pedido         = new Pedido();
+            ItemPedido item       = new ItemPedido();
+            Usuario usuario       = new Usuario();
+
+            try {
+                ResultSet rst = us.consultaUsuario(nome);
+                while (rst.next()) {
+                    pedido.setId_usuario(rst.getInt("id"));
+                }
+                //Inserio o pedido e id do usuario
+                pedidoDAO.inserirPedido(pedido);
+            } catch (SQLException ex) {
+
             }
-        } catch (SQLException ex) {
+
+            try {
+                ResultSet rst = pedidoDAO.ultimaSeq();
+                while (rst.next()) {
+                    pedido.setId(rst.getInt("MAX"));
+                }
+            } catch (SQLException ex) {
+
+            }
+
+            HttpSession sessao = request.getSession();
+            ArrayList<Produto> produtos = (ArrayList) sessao.getAttribute("produto");
+            //inseri o item do pedido
+            for (Produto p : produtos) {
+                item.setId_pedido(pedido.getId());
+                item.setId_produto(p.getId_produto());
+                item.setQuantidade(p.getQtd());
+                item.setVl_produto(p.getVl_produto());
+                itemDAO.inserirProduto(item);
+            }
+
+            response.sendRedirect("CarrinhoCompra.jsp");
 
         }
-
-        HttpSession sessao = request.getSession();
-        ArrayList<Produto> produtos = (ArrayList) sessao.getAttribute("produto");
-        //inseri o item do pedido
-        for (Produto p : produtos) {
-            item.setId_pedido(pedido.getId());
-            item.setId_produto(p.getId_produto());
-            item.setQuantidade(p.getQtd());
-            item.setVl_produto(p.getVl_produto());
-            itemDAO.inserirProduto(item);
-        }
-
-        response.sendRedirect("CarrinhoCompra.jsp");
     }
 
     @Override

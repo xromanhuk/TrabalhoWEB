@@ -30,8 +30,7 @@
                     <tr>
                         <th>Descrição</th> <th>Informação</th> <th>Valor</th> <th>Quantidade</th> <th>SubTotal</th><th>Remover</th>
                     </tr>
-                    <%
-                        for (Produto p : produtos) {
+                    <%                        for (Produto p : produtos) {
                     %>
                     <tr>
                         <td> <%= p.getDs_produto()%></td>

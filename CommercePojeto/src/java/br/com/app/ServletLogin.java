@@ -14,32 +14,30 @@ import javax.servlet.http.HttpServletResponse;
 public class ServletLogin extends HttpServlet {
 
     public static boolean erro = false;
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-    }
 
-   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String usuario = request.getParameter("usuario");
+        String usuario = request.getParameter("usuario");
         String senha = request.getParameter("senha");
-        
+
         if (LoginController.login(usuario, senha)) {
             response.addCookie(LoginController.getCookie("usuario", usuario));
             response.addCookie(LoginController.getCookie("senha", senha));
-            
-            response.sendRedirect("CadastroProduto.jsp");
+
+            String acao = request.getParameter("tem");
+            if (acao.equals("nao")) {
+                response.sendRedirect("CarrinhoCompra.jsp");
+            } else {
+                response.sendRedirect("CadastroProduto.jsp");
+            }
+
         } else {
             erro = true;
             response.sendRedirect("senha.jsp");
         }
     }
 
-    
     @Override
     public String getServletInfo() {
         return "Short description";

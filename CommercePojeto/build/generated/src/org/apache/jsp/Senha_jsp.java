@@ -61,11 +61,17 @@ public final class Senha_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <link rel=\"stylesheet\" href=\"css/custom.css\">\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
+      out.write("\n");
       out.write("        <div class=\"row\">\n");
       out.write("            <div class=\"col-sm-6 col-md-4 col-md-offset-4\">\n");
       out.write("                <div class=\"account-wall\">\n");
       out.write("                    <img class=\"profile-img\" src=\"img/profile.jpg\" alt=\"\">\n");
-      out.write("                    <form class=\"form-signin\" action=\"ServletLogin\" method=\"POST\">\n");
+      out.write("                    ");
+ String car = request.getParameter("tem"); 
+      out.write("\n");
+      out.write("                    <form class=\"form-signin\" action=\"ServletLogin?tem=");
+      out.print( car);
+      out.write("\" method=\"POST\">\n");
       out.write("                        <input type=\"text\" class=\"form-control\" placeholder=\"Usuário\" name=\"usuario\" autofocus required>\n");
       out.write("                        <input type=\"password\" class=\"form-control\" placeholder=\"Senha\" name=\"senha\" required>\n");
       out.write("                        <button class=\"btn btn-lg btn-danger btn-block\" type=\"submit\">Entrar</button>\n");
@@ -76,7 +82,7 @@ public final class Senha_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                        <br/><p style=\"color:blue;\">Informação Inválida!</p>\n");
       out.write("                        ");
  ServletLogin.erro = false;
-                              }
+                            }
       out.write("  \n");
       out.write("\n");
       out.write("                    </form>\n");

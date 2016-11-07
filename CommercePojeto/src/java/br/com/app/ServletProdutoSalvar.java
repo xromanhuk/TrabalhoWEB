@@ -56,9 +56,4 @@ public class ServletProdutoSalvar extends HttpServlet {
 
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }

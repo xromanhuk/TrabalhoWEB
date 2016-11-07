@@ -77,6 +77,6 @@
     </body>
 </html>
 <% } else {
-        response.sendRedirect("senha.jsp");
+        response.sendRedirect("Senha.jsp");
     }
 %>

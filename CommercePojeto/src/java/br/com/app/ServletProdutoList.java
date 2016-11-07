@@ -1,8 +1,11 @@
 package br.com.app;
 
+import br.com.DAO.ProdutoDAO;
 import br.com.modelo.Produto;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpSession;
 public class ServletProdutoList extends HttpServlet {
 
     public ArrayList<Produto> produtos = new ArrayList<>();
+
+    ProdutoDAO prodDAO = new ProdutoDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -64,6 +69,7 @@ public class ServletProdutoList extends HttpServlet {
                 response.sendRedirect("CarrinhoCompra.jsp");
 
                 break;
+
         }
     }
 
@@ -71,6 +77,11 @@ public class ServletProdutoList extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        ResultSet res = prodDAO.consultaDescricao(request.getParameter("pesq"));
+
+        request.setAttribute("consulta", res);
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp?acao=pesq");
+        rd.forward(request, response);
     }
 
 }
